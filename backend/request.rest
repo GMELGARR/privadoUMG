@@ -1,0 +1,76 @@
+// Create a user role admin
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "Gerson Melgar",
+    "username": "gmelgar",
+    "password": "123456",
+    "confPassword": "123456",
+    "role": "admin",
+    "isActive": "true"
+}
+
+###
+// Create a user role user
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "Mariano Galvez",
+    "username": "mgalvez",
+    "password": "Mg2024",
+    "confPassword": "Mg2024",
+    "role": "user",
+    "isActive": "true"
+}
+
+###
+// Create a user role user
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "Luis Alvarez",
+    "username": "lalvarez",
+    "password": "Guatemala24",
+    "confPassword": "Guatemala24",
+    "role": "user",
+    "isActive": "true"
+}
+
+###
+//Get All Users
+Get http://localhost:5000/users
+
+###
+//Get single user by uuid
+GET http://localhost:5000/users/efecb1e0-38e3-4b25-87a1-52d7b9ae96c5
+
+###
+// Update user
+PATCH http://localhost:5000/users/786a86a7-576a-4e87-a8e4-172e709aca71
+Content-Type: application/json
+
+{
+    "name": "Mariano Galvez",
+    "username": "mgalvez",
+    "password": "Mg2025",
+    "confPassword": "Mg2025",
+    "role": "user",
+    "isActive": "true"
+}
+
+###
+// Create user admin
+POST HTTP://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name": "Fernanda Ocaña",
+    "username": "focana",
+    "password": "Focana2024",
+    "confPassword": "Focana2024",
+    "role": "admin",
+    "isActive": "true"
+}
