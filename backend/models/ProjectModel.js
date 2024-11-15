@@ -56,17 +56,27 @@ const Projects = db.define('project', {
             notEmpty: true
         }
     },
+    repositoryUrl: {
+        type: DataTypes.STRING, // Se usa STRING para almacenar la URL
+        allowNull: true, // Puede ser nulo si no se proporciona
+        validate: {
+            isUrl: {
+                msg: "Debe ser una URL válida"
+            }
+        }
+    },
     estado: {
         type: DataTypes.STRING, // Cambiado a STRING para representar estados
         allowNull: false,
         validate: {
             notEmpty: true
         }
-    },
+    }
 }, {
     freezeTableName: true
 });
 
 Users.hasMany(Projects);
 Projects.belongsTo(Users, { foreignKey: 'userId' });
+
 export default Projects;
