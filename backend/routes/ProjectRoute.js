@@ -4,7 +4,8 @@ import {
     getProjectById,
     createProject,
     updateProject,
-    deleteProject
+    deleteProject,
+    searchProjects
 } from "../controllers/Projects.js";
 import { verifyUser} from "../middleware/AuthUser.js";
 
@@ -24,5 +25,7 @@ router.patch('/projects/:id', verifyUser, updateProject);
 
 // Ruta para eliminar un proyecto, solo accesible por administradores
 router.delete('/projects/:id', verifyUser, deleteProject);
+
+router.get('/projects/search', verifyUser, searchProjects);
 
 export default router;

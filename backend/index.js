@@ -7,9 +7,21 @@ import SequelizeStore from "connect-session-sequelize";
 import UserRoute from "./routes/UserRoute.js";
 import ProjectRoute from "./routes/ProjectRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import helmet from 'helmet'; // Agregamos helmet para seguridad adicional
+
 dotenv.config();
 
 const app = express();
+
+// Configuración básica de seguridad
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            connectSrc: ["'self'", "https://localhost:3000"]
+        }
+    }
+}));
 
 const sessionStore = SequelizeStore(session.Store);
 
@@ -17,31 +29,50 @@ const store = new sessionStore({
     db: db
 });
 
-//(async()=>{
-//    await db.sync();  
-//})();
-
 app.use(session({
     secret: process.env.SESS_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // Cambiado a false por seguridad
     store: store,
     cookie: {
-        secure: 'auto'  // aca se estable true o false si es http o https pero auto para que tome ambos.
+        secure: true, // Mantenemos true para HTTPS
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000 // 1 día
     }
 }));
 
 app.use(cors({
     credentials: true,
-    origin: 'https://localhost:3000'
+    origin: 'https://localhost:3000', // Mantenemos HTTPS
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
+
+app.use(express.json({ limit: '10mb' }));
 app.use(UserRoute);
 app.use(ProjectRoute);
 app.use(AuthRoute);
 
-//store.sync();  //esto nos creo la tabla auth
+// Manejador de errores global
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ 
+        msg: "Error interno del servidor",
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
 
-app.listen(process.env.APP_PORT, ()=> {
-    console.log('Server up and running...');
+const PORT = process.env.APP_PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+process.on('unhandledRejection', (err) => {
+    console.log('Error no manejado:', err.message);
+    // En producción podrías querer mantener el servidor funcionando
+    // pero en desarrollo es bueno saber si hay errores no manejados
+    if (process.env.NODE_ENV === 'development') {
+        process.exit(1);
+    }
 });
