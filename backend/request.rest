@@ -139,3 +139,7 @@ Content-Type: application/json
     "repositoryUrl": "https://github.com/jasmine/calculator-demo",
     "estado": "En progreso"
 }
+
+###
+// POST Run Test
+POST http://localhost:5000/projects/ca959cbc-d906-4ae0-b4a0-d95ee880dc09/tests

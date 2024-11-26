@@ -54,7 +54,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(UserRoute);
 app.use(ProjectRoute);
 app.use(AuthRoute);
-app.use('/api', TestRoute);
+app.use(TestRoute);
 
 // Manejador de errores global
 app.use((err, req, res, next) => {
