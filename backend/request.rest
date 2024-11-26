@@ -124,3 +124,18 @@ Content-Type: application/json
     "repositoryUrl": "https://www.mirepo.pruebaprivado.com",
     "estado": "En progreso"
 }
+
+###
+// POST Data project
+POST http://localhost:5000/projects
+Content-Type: application/json
+
+{
+    "name": "Calculadora",
+    "description": "Una calculadora básica con funciones matemáticas simples",
+    "technologies": "JavaScript",
+    "fechaInicio": "2024-11-29",
+    "fechaEstimacion": "2025-06-14",
+    "repositoryUrl": "https://github.com/jasmine/calculator-demo",
+    "estado": "En progreso"
+}

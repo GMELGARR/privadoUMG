@@ -7,6 +7,7 @@ import SequelizeStore from "connect-session-sequelize";
 import UserRoute from "./routes/UserRoute.js";
 import ProjectRoute from "./routes/ProjectRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import TestRoute from "./routes/TestRoute.js";
 import helmet from 'helmet'; // Agregamos helmet para seguridad adicional
 
 dotenv.config();
@@ -31,20 +32,20 @@ const store = new sessionStore({
 
 app.use(session({
     secret: process.env.SESS_SECRET,
-    resave: false,
-    saveUninitialized: false, // Cambiado a false por seguridad
+    resave: true,
+    saveUninitialized: true, // Cambiado a false por seguridad
     store: store,
     cookie: {
-        secure: true, // Mantenemos true para HTTPS
+        secure: false, // Mantenemos true para HTTPS
         httpOnly: true,
-        sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000 // 1 día
+        sameSite: 'lax',
+        maxAge: 30 * 24 * 60 * 60 * 1000 // 1 día
     }
 }));
 
 app.use(cors({
     credentials: true,
-    origin: 'https://localhost:3000', // Mantenemos HTTPS
+    origin: 'http://localhost:3000', // Mantenemos HTTPS
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -53,6 +54,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(UserRoute);
 app.use(ProjectRoute);
 app.use(AuthRoute);
+app.use('/api', TestRoute);
 
 // Manejador de errores global
 app.use((err, req, res, next) => {
