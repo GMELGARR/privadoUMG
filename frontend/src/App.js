@@ -1,20 +1,59 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import Login from './components/Auth/Login.jsx';  // Corregida la ruta según tu estructura
+import Login from './components/Auth/Login';
+import Layout from './components/layout/Layout';
+import Dashboard from './components/dashboard/Dashboard';
+import PrivateRoute from './components/Auth/PrivateRoute';
+import { useAuth } from './context/AuthContext';
+
+// Componente para manejar la redirección desde el login
+const PublicRoute = ({ children }) => {
+    const { user } = useAuth();
+    
+    if (user) {
+        // Si hay usuario autenticado, redirige al dashboard
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return children;
+};
 
 function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Rutas públicas */}
+                    <Route 
+                        path="/login" 
+                        element={
+                            <PublicRoute>
+                                <Login />
+                            </PublicRoute>
+                        } 
+                    />
+
+                    {/* Rutas privadas */}
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <Dashboard />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+
+                    {/* Redireccionamiento por defecto */}
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+                    {/* Ruta 404 */}
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
+    );
 }
 
 export default App;
