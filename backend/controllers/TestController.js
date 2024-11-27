@@ -1,4 +1,3 @@
-// controllers/TestController.js
 import TestResult from '../models/TestResult.js';
 import Project from '../models/ProjectModel.js';
 
@@ -30,6 +29,13 @@ export const runProjectTests = async (req, res) => {
                 high: 0,
                 medium: 1,
                 low: 2
+            },
+            performanceMetrics: {
+                responseTime: '120ms',
+                throughput: '1000 req/sec',
+                memoryUsage: '256MB',
+                cpuUtilization: '45%',
+                loadTime: '1.5s'
             },
             testSummary: {
                 total: 10,
