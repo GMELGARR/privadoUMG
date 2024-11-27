@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import Login from './components/Auth/Login';
 import Layout from './components/layout/Layout';
 import Dashboard from './components/dashboard/Dashboard';
+import ProjectList from './components/projects/ProjectList';
 import PrivateRoute from './components/Auth/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 
@@ -11,7 +12,6 @@ const PublicRoute = ({ children }) => {
     const { user } = useAuth();
     
     if (user) {
-        // Si hay usuario autenticado, redirige al dashboard
         return <Navigate to="/dashboard" replace />;
     }
 
@@ -40,6 +40,18 @@ function App() {
                             <PrivateRoute>
                                 <Layout>
                                     <Dashboard />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+
+                    {/* Ruta de proyectos */}
+                    <Route
+                        path="/projects"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <ProjectList />
                                 </Layout>
                             </PrivateRoute>
                         }
