@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/api";
-import { testService } from "../../services/api";
-import TestDetail from "./TestDetail";
+//import { testService } from "../../services/api";
+//import TestDetail from "./TestDetail";
 
 const TestList = () => {
   const [tests, setTests] = useState([]);

@@ -6,7 +6,7 @@ export const getUsers = async (req, res) => {
     try {
         const response = await User.findAll({
            // atributes: ['uuid', 'name', 'username', 'role', 'isaActive'],  //para mostrar unicamente campos especificos
-            where: { isActive: true } // Filtra solo usuarios activos
+            //where: { isActive: true } // Filtra solo usuarios activos
         });
         res.status(200).json(response); 
     } catch (error) {
@@ -133,3 +133,26 @@ export const deleteUser = async (req, res) => {
     }
 };
 
+export const toggleUserStatus = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                uuid: req.params.id
+            }
+        });
+        
+        if (!user) return res.status(404).json({ msg: "Usuario no encontrado" });
+
+        await User.update(
+            { isActive: !user.isActive }, // Cambia el estado actual al opuesto
+            { where: { uuid: req.params.id } }
+        );
+        
+        res.status(200).json({ 
+            msg: user.isActive ? "Usuario desactivado" : "Usuario activado",
+            isActive: !user.isActive 
+        });
+    } catch (error) {
+        res.status(400).json({ msg: error.message });
+    }
+};

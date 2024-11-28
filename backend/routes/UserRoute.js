@@ -4,7 +4,8 @@ import {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    toggleUserStatus
 } from "../controllers/Users.js";
 import { verifyUser, adminOnly } from "../middleware/AuthUser.js";
 
@@ -24,5 +25,7 @@ router.patch('/users/:id',verifyUser, adminOnly, updateUser);
 
 // Ruta para desactivar un usuario (en lugar de eliminarlo), solo accesible por administradores
 router.delete('/users/:id', verifyUser, adminOnly, deleteUser);
+
+router.patch('/users/toggle/:id', verifyUser, adminOnly, toggleUserStatus);
 
 export default router;
