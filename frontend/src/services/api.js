@@ -20,4 +20,17 @@ export const authService = {
     }
 };
 
+export const testService = {
+    getAllTests: async () => {
+        return await api.get('/tests');
+    },
+    getTestsByProject: async (projectId) => {
+        return await api.get(`/projects/${projectId}/tests`);
+    },
+    runTest: async (projectId) => {
+        return await api.post(`/tests/run/${projectId}`);
+    }
+};
+
+
 export default api;

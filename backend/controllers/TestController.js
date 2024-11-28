@@ -1,6 +1,22 @@
 import TestResult from '../models/TestResult.js';
 import Project from '../models/ProjectModel.js';
 
+export const getAllTests = async (req, res) => {
+    try {
+        const tests = await TestResult.findAll({
+            include: [{
+                model: Project,
+                attributes: ['name', 'uuid']
+            }],
+            order: [['executionDate', 'DESC']]
+        });
+        res.status(200).json(tests);
+    } catch (error) {
+        console.error("Error al obtener pruebas:", error);
+        res.status(500).json({ msg: "Error al cargar las pruebas" });
+    }
+};
+
 export const runProjectTests = async (req, res) => {
     try {
         const { projectId } = req.params;
@@ -43,7 +59,7 @@ export const runProjectTests = async (req, res) => {
                 failed: 1,
                 coverage: '80%'
             },
-            executionLogs: 'Test ejecutado exitosamente',
+            executionLogs: 'Test ejecutado exitosamente - Análisis completo del código realizado.',
             commitInfo: {
                 hash: 'abc123',
                 branch: 'main',

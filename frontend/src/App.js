@@ -5,6 +5,7 @@ import Layout from './components/layout/Layout';
 import Dashboard from './components/dashboard/Dashboard';
 import ProjectList from './components/projects/ProjectList';
 import PrivateRoute from './components/Auth/PrivateRoute';
+import TestList from './components/tests/TestList';
 import { useAuth } from './context/AuthContext';
 
 // Componente para manejar la redirección desde el login
@@ -52,6 +53,17 @@ function App() {
                             <PrivateRoute>
                                 <Layout>
                                     <ProjectList />
+                                </Layout>
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/tests"
+                        element={
+                            <PrivateRoute>
+                                <Layout>
+                                    <TestList />
                                 </Layout>
                             </PrivateRoute>
                         }

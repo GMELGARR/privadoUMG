@@ -7,6 +7,9 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
         description: initialData?.description || '',
         technologies: initialData?.technologies || '',
         repositoryUrl: initialData?.repositoryUrl || '',
+        fechaInicio: initialData?.fechaInicio || '',
+        fechaEstimacion: initialData?.fechaEstimacion || '',
+        estado: initialData?.estado || 'En Progreso', // Valor por defecto
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +20,6 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
             ...prev,
             [name]: value
         }));
-        // Limpiar error del campo cuando el usuario empieza a escribir
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -34,6 +36,17 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
         if (!formData.description.trim()) {
             newErrors.description = 'La descripción es requerida';
         }
+        if (!formData.fechaInicio) {
+            newErrors.fechaInicio = 'La fecha de inicio es requerida';
+        }
+        if (!formData.fechaEstimacion) {
+            newErrors.fechaEstimacion = 'La fecha estimada es requerida';
+        }
+        // Validar que fecha estimación sea posterior a fecha inicio
+        if (formData.fechaInicio && formData.fechaEstimacion && 
+            new Date(formData.fechaEstimacion) <= new Date(formData.fechaInicio)) {
+            newErrors.fechaEstimacion = 'La fecha estimada debe ser posterior a la fecha de inicio';
+        }
         return newErrors;
     };
 
@@ -49,10 +62,8 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
         setIsSubmitting(true);
         try {
             if (initialData) {
-                // Actualizar proyecto existente
                 await api.patch(`/projects/${initialData.uuid}`, formData);
             } else {
-                // Crear nuevo proyecto
                 await api.post('/projects', formData);
             }
             onSave();
@@ -116,6 +127,42 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
                         )}
                     </div>
 
+                    {/*campos de fecha */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Fecha de Inicio
+                            </label>
+                            <input
+                                type="date"
+                                name="fechaInicio"
+                                value={formData.fechaInicio}
+                                onChange={handleChange}
+                                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm
+                                    ${errors.fechaInicio ? 'border-red-500' : ''}`}
+                            />
+                            {errors.fechaInicio && (
+                                <p className="mt-1 text-sm text-red-600">{errors.fechaInicio}</p>
+                            )}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                Fecha Estimada de Finalización
+                            </label>
+                            <input
+                                type="date"
+                                name="fechaEstimacion"
+                                value={formData.fechaEstimacion}
+                                onChange={handleChange}
+                                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm
+                                    ${errors.fechaEstimacion ? 'border-red-500' : ''}`}
+                            />
+                            {errors.fechaEstimacion && (
+                                <p className="mt-1 text-sm text-red-600">{errors.fechaEstimacion}</p>
+                            )}
+                        </div>
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">
                             Tecnologías
@@ -142,6 +189,23 @@ const ProjectForm = ({ onClose, onSave, initialData = null }) => {
                             placeholder="https://github.com/usuario/repositorio"
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Estado del Proyecto
+                        </label>
+                        <select
+                            name="estado"
+                            value={formData.estado}
+                            onChange={handleChange}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="En Progreso">En Progreso</option>
+                            <option value="pausado">Pausado</option>
+                            <option value="completado">Completado</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
                     </div>
 
                     {errors.submit && (

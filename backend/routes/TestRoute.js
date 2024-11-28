@@ -1,6 +1,7 @@
 // routes/TestRoute.js
 import express from "express";
 import {
+    getAllTests,    
     runProjectTests,
     getTestHistory
 } from "../controllers/TestController.js";
@@ -16,5 +17,6 @@ router.use((req, res, next) => {
 // Rutas para tests
 router.post('/projects/:projectId/tests', verifyUser, runProjectTests);
 router.get('/projects/:projectId/tests', verifyUser, getTestHistory);
+router.get('/tests', verifyUser, getAllTests);
 
 export default router;

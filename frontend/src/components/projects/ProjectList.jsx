@@ -29,24 +29,48 @@ const ProjectList = () => {
     setShowForm(true);
   };
 
+  const handleDeleteProject = async (projectId) => {
+    if (window.confirm("¿Está seguro de que desea eliminar este proyecto?")) {
+      try {
+        await api.delete(`/projects/${projectId}`);
+        loadProjects();
+      } catch (error) {
+        setError("Error al eliminar el proyecto");
+      }
+    }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "No definido";
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   const handleCloseForm = () => {
     setShowForm(false);
     setSelectedProject(null);
   };
 
   const handleSaveProject = () => {
-    loadProjects(); // Recargar la lista de proyectos
+    loadProjects();
     handleCloseForm();
   };
 
-  const handleDeleteProject = async (projectId) => {
-    if (window.confirm("¿Está seguro de que desea eliminar este proyecto?")) {
-      try {
-        await api.delete(`/projects/${projectId}`);
-        loadProjects(); // Recargar la lista
-      } catch (error) {
-        setError("Error al eliminar el proyecto");
-      }
+  const getStatusColor = (estado) => {
+    switch (estado) {
+      case "En Progreso":
+        return "bg-green-100 text-green-800";
+      case "pausado":
+        return "bg-yellow-100 text-yellow-800";
+      case "completado":
+        return "bg-blue-100 text-blue-800";
+      case "cancelado":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -103,6 +127,12 @@ const ProjectList = () => {
                     Descripción
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Fecha Inicio
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Fecha Estimada
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Estado
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -126,15 +156,20 @@ const ProjectList = () => {
                         {project.description}
                       </div>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(project.fechaInicio)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {formatDate(project.fechaEstimacion)}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          project.estado === "activo"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                          project.estado
+                        )}`}
                       >
-                        {project.estado}
+                        {project.estado.charAt(0).toUpperCase() +
+                          project.estado.slice(1)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
