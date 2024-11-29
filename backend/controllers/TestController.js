@@ -137,10 +137,12 @@ export const getTestHistory = async (req, res) => {
         }
 
         const tests = await TestResult.findAll({
-            where: {
-                projectId: project.id
-            },
-            order: [['createdAt', 'DESC']]
+            include: [{
+                model: Project,
+                attributes: ['name', 'uuid'],
+                required: true // Esto fuerza el INNER JOIN
+            }],
+            order: [['executionDate', 'DESC']]
         });
 
         res.status(200).json(tests);

@@ -15,7 +15,7 @@ const TestList = () => {
   const loadTests = async () => {
     try {
       const response = await api.get("/tests");
-      console.log("Datos recibidos:", response.data);
+      console.log(JSON.stringify(response.data[0], null, 2));
       setTests(response.data);
       setLoading(false);
     } catch (err) {
@@ -69,16 +69,16 @@ const TestList = () => {
           const securityIssues = parseJsonField(test.securityIssues);
           const performanceMetrics = parseJsonField(test.performanceMetrics);
           const testSummary = parseJsonField(test.testSummary);
-        //  const commitInfo = parseJsonField(test.commitInfo);
+          //  const commitInfo = parseJsonField(test.commitInfo);
 
           return (
             <div key={test.uuid} className="bg-white rounded-lg shadow-md p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    {test.Project
-                      ? test.Project.name
-                      : `Proyecto ${test.projectId}`}
+                    {test.project?.name ||
+                      test.Project?.name ||
+                      "Sin nombre de proyecto"}
                   </h3>
                   <p className="text-sm text-gray-500">
                     {new Date(test.executionDate).toLocaleString()}
