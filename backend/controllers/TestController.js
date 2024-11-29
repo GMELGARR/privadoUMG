@@ -3,9 +3,11 @@ import Project from '../models/ProjectModel.js';
 
 export const getAllTests = async (req, res) => {
     try {
+        console.log("Iniciando búsqueda de tests...");
+
         const tests = await TestResult.findAll({
             include: [{
-                model: Projects,  // Asegúrate de que Projects esté importado
+                model: Project,  // Asegúrate de que Projects esté importado
                 attributes: ['name', 'uuid'] // Los campos que necesitamos del proyecto
             }],
             order: [['executionDate', 'DESC']], // Ordenar por fecha de ejecución

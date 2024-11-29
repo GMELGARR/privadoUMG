@@ -18,5 +18,6 @@ router.use((req, res, next) => {
 router.post('/projects/:projectId/tests', verifyUser, runProjectTests);
 router.get('/projects/:projectId/tests', verifyUser, getTestHistory);
 router.get('/tests', verifyUser, getAllTests);
+//router.post('/tests/run/:projectId', verifyUser, runProjectTests);
 
 export default router;
