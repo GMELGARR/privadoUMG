@@ -65,5 +65,6 @@ const TestResult = db.define('test_result', {
 
 Projects.hasMany(TestResult);
 TestResult.belongsTo(Projects, { foreignKey: 'projectId' });
+as: 'Project'  // Importante: define el alias
 
 export default TestResult;

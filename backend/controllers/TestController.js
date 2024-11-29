@@ -5,11 +5,12 @@ export const getAllTests = async (req, res) => {
     try {
         const tests = await TestResult.findAll({
             include: [{
-                model: Project,
-                attributes: ['name', 'uuid']
+                model: Projects,  // Asegúrate de que Projects esté importado
+                attributes: ['name', 'uuid'] // Los campos que necesitamos del proyecto
             }],
-            order: [['executionDate', 'DESC']]
+            order: [['executionDate', 'DESC']], // Ordenar por fecha de ejecución
         });
+        console.log("Tests encontrados:", JSON.stringify(tests, null, 2)); // Para debugging
         res.status(200).json(tests);
     } catch (error) {
         console.error("Error al obtener pruebas:", error);
