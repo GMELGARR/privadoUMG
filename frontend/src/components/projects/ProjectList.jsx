@@ -71,7 +71,7 @@ const ProjectList = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      //const response = await api.post(`/tests/run/${projectId}`);
+      const response = await api.post(`/tests/run/${projectId}`);
 
       // Actualizar la lista de proyectos
       const updatedProjects = projects.map((project) => {

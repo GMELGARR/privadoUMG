@@ -151,3 +151,7 @@ POST http://localhost:5000/projects/3ba54644-41b9-4a09-b098-40e6d499db5f/tests
 ###
 //Get tests
 GET http://localhost:5000/tests
+
+###
+// POST Run Test
+POST http://localhost:5000/projects/574b3c8f-509b-4ba1-a733-a0b7ff9917a6/tests

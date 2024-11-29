@@ -69,7 +69,7 @@ const TestList = () => {
           const securityIssues = parseJsonField(test.securityIssues);
           const performanceMetrics = parseJsonField(test.performanceMetrics);
           const testSummary = parseJsonField(test.testSummary);
-          const commitInfo = parseJsonField(test.commitInfo);
+        //  const commitInfo = parseJsonField(test.commitInfo);
 
           return (
             <div key={test.uuid} className="bg-white rounded-lg shadow-md p-6">
