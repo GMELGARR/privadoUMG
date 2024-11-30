@@ -9,6 +9,7 @@ import ProjectRoute from "./routes/ProjectRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import TestRoute from "./routes/TestRoute.js";
 import helmet from 'helmet'; // Agregamos helmet para seguridad adicional
+import DashboardRoute from "./routes/DashboardRoute.js";
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use(UserRoute);
 app.use(ProjectRoute);
 app.use(AuthRoute);
 app.use(TestRoute);
+app.use(DashboardRoute);
 
 // Manejador de errores global
 app.use((err, req, res, next) => {
